@@ -1,0 +1,21 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - backend-data:/app/backend/data
+    environment:
+      - JWT_SECRET=super-secret-jwt-key
+      - DB_PATH=data/database.sqlite
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/posts"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  backend-data:
